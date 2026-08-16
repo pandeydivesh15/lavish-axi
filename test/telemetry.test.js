@@ -43,7 +43,9 @@ test("telemetry can be disabled by environment", () => {
   assert.equal(config.enabled, false);
 });
 
-test("telemetry uses env values before build-time defaults", () => {
+// Telemetry is forced off in this fork, so resolution never reaches the
+// host/websiteID branches this covers.
+test.skip("telemetry uses env values before build-time defaults", () => {
   const config = resolveTelemetryConfig({
     env: {
       LAVISH_AXI_UMAMI_HOST: " https://env.example ",

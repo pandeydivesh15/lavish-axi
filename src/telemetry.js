@@ -1,4 +1,12 @@
 const HARDCODED_FALLBACK_HOST = "https://a.kunchenguid.com";
+
+// Upstream treats LAVISH_AXI_TELEMETRY as an opt-out, so usage events go to
+// the author's analytics host by default. Forced off in this fork: this runs
+// against private source that must not be described to a third party, and an
+// opt-out a future release can quietly re-key is not a control. Disabling it here
+// makes the client factory return the noop client, so no call site needs
+// patching.
+const TELEMETRY_FORCED_OFF = true;
 const UMAMI_PATH = "/api/send";
 const DEFAULT_HOSTNAME = "cli";
 const DEFAULT_TITLE = "Lavish Editor CLI";
@@ -8,7 +16,7 @@ export function resolveTelemetryConfig(input) {
   const optOut = String(input.env.LAVISH_AXI_TELEMETRY || "")
     .trim()
     .toLowerCase();
-  if (optOut === "0" || optOut === "false" || optOut === "off") {
+  if (TELEMETRY_FORCED_OFF || optOut === "0" || optOut === "false" || optOut === "off") {
     return { enabled: false, host: "", websiteID: "" };
   }
 
